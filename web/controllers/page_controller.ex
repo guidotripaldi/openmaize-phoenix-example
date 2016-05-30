@@ -54,7 +54,7 @@ defmodule Welcome.PageController do
         |> put_flash(:info, "Check your inbox for instructions on how to reset your password.")
         |> redirect(to: page_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "index.html", changeset: changeset)
+        render(conn, "askreset_form.html", changeset: changeset)
     end
   end
 
