@@ -118,7 +118,8 @@ defmodule Welcome.Authorize do
   def handle_login(%Plug.Conn{private: %{openmaize_error: message}} = conn, _params) do
     unauthenticated conn, message
   end
-  def handle_login(%Plug.Conn{private: %{openmaize_otpdata: {storage, uniq, id}}} = conn, _) do
+  def handle_login(%Plug.Conn{private: %{openmaize_otpdata:
+     {storage, uniq, id, _}}} = conn, _) do
     render conn, "twofa.html", storage: storage, uniq: uniq, id: id
   end
   def handle_login(%Plug.Conn{private:

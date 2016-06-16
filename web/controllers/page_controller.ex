@@ -11,7 +11,8 @@ defmodule Welcome.PageController do
     mail_function: &Mailer.receipt_confirm/1] when action in [:reset_password]
 
   #plug Openmaize.Login, [unique_id: :email] when action in [:login_user]
-  plug Openmaize.Login, [unique_id: &Name.email_username/1] when action in [:login_user]
+  plug Openmaize.Login, [unique_id: &Name.email_username/1, override_exp: 10_080]
+  when action in [:login_user]
   plug Openmaize.OnetimePass when action in [:login_twofa]
   plug Openmaize.Logout when action in [:logout]
 

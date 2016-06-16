@@ -18,7 +18,8 @@ config :welcome, Welcome.Endpoint,
 config :welcome, Welcome.Endpoint,
   live_reload: [
     patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif)$},
+      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
+      ~r{priv/gettext/.*(po)$},
       ~r{web/views/.*(ex)$},
       ~r{web/templates/.*(eex)$}
     ]
@@ -47,6 +48,10 @@ config :welcome, Welcome.Repo,
 config :openmaize,
   user_model: Welcome.User,
   repo: Welcome.Repo
+
+# OpenmaizeJWT configuration
+config :openmaize_jwt,
+  token_data: %{}
 
 # Configure mailgun
 config :welcome,

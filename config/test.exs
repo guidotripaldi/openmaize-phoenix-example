@@ -25,6 +25,10 @@ config :openmaize,
   user_model: Welcome.User,
   repo: Welcome.Repo
 
+# OpenmaizeJWT configuration
+config :openmaize_jwt,
+  token_data: %{}
+
 # Configure mailgun
 config :welcome,
   mailgun_domain: System.get_env("MAILGUN_DOMAIN"),

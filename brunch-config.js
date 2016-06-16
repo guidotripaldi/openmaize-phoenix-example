@@ -62,7 +62,8 @@ exports.config = {
 
   modules: {
     autoRequire: {
-      "js/app.js": ["web/static/js/app"]
+      "js/app.js": ["web/static/js/app"],
+      "js\\app.js": ["web/static/js/app"]
     }
   },
 

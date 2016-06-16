@@ -14,7 +14,6 @@ defmodule Welcome.UserController do
   end
 
   def show(conn, %{"id" => id}, _user) do
-    IO.inspect conn
     user = Repo.get(User, id)
     render(conn, "show.html", user: user)
   end
