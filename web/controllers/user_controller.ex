@@ -7,25 +7,22 @@ defmodule Welcome.UserController do
   plug :scrub_params, "user" when action in [:update]
   plug :id_check when action in [:show, :edit, :update]
 
-  def action(conn, _), do: authorize_action conn, ["admin", "user"], __MODULE__
+  def action(conn, _), do: authorize_action_dbcheck conn, ["admin", "user"], __MODULE__
 
   def index(conn, _params, _user) do
     render conn, "index.html"
   end
 
-  def show(conn, %{"id" => id}, _user) do
-    user = Repo.get(User, id)
+  def show(conn, _params, user) do
     render(conn, "show.html", user: user)
   end
 
-  def edit(conn, %{"id" => id}, _user) do
-    user = Repo.get(User, id)
+  def edit(conn, _params, user) do
     changeset = User.changeset(user)
     render(conn, "edit.html", user: user, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}, _user) do
-    user = Repo.get(User, id)
+  def update(conn, %{"user" => user_params}, user) do
     changeset = User.changeset(user, user_params)
 
     case Repo.update(changeset) do

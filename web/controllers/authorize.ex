@@ -2,6 +2,7 @@ defmodule Welcome.Authorize do
   import Plug.Conn
   import Phoenix.Controller
   import Welcome.Router.Helpers
+  alias Welcome.{Repo, User}
 
   @redirects %{"admin" => "/admin", "user" => "/users", nil => "/"}
 
@@ -21,7 +22,7 @@ defmodule Welcome.Authorize do
 
       def action(conn, _), do: authorize_action conn, ["admin", "user"], __MODULE__
 
-  This command will only allow connections for users with the "admin" and "user"
+  This command will only allow connections for users with the "admin" or "user"
   roles.
 
   You will also need to change the other functions in the controller to accept
@@ -32,9 +33,29 @@ defmodule Welcome.Authorize do
     unauthenticated conn
   end
   def authorize_action(%Plug.Conn{assigns: %{current_user: current_user},
-                                  params: params} = conn, roles, module) do
+    params: params} = conn, roles, module) do
     if current_user.role in roles do
       apply(module, action_name(conn), [conn, params, current_user])
+    else
+      unauthorized conn, current_user
+    end
+  end
+
+  @doc """
+  Similar to `authorize_action`, but the current_user is the full user struct.
+
+  The `authorize_action` function produces a current_user with just the data
+  from the JSON Web Token. With this function, the database is checked and the
+  current_user contains all the data about the user from the database.
+  """
+  def authorize_action_dbcheck(%Plug.Conn{assigns: %{current_user: nil}} = conn, _, _) do
+    unauthenticated conn
+  end
+  def authorize_action_dbcheck(%Plug.Conn{assigns: %{current_user: current_user},
+    params: params} = conn, roles, module) do
+    if current_user.role in roles do
+      user = Repo.get(User, current_user.id)
+      apply(module, action_name(conn), [conn, params, user])
     else
       unauthorized conn, current_user
     end
@@ -44,7 +65,10 @@ defmodule Welcome.Authorize do
   Redirect an unauthenticated user to the login page.
   """
   def unauthenticated(conn, message \\ "You need to log in to view this page") do
-    conn |> put_flash(:error, message) |> redirect(to: login_path(conn, :login)) |> halt
+    conn
+    |> put_flash(:error, message)
+    |> redirect(to: login_path(conn, :login))
+    |> halt
   end
 
   @doc """
@@ -54,7 +78,10 @@ defmodule Welcome.Authorize do
   `@redirects` module attribute in this file.
   """
   def unauthorized(conn, current_user, message \\ "You are not authorized to view this page") do
-    conn |> put_flash(:error, message) |> redirect(to: @redirects[current_user.role]) |> halt
+    conn
+    |> put_flash(:error, message)
+    |> redirect(to: @redirects[current_user.role])
+    |> halt
   end
 
   @doc """
@@ -90,8 +117,8 @@ defmodule Welcome.Authorize do
   def id_check(%Plug.Conn{assigns: %{current_user: nil}} = conn, _opts) do
     unauthenticated conn
   end
-  def id_check(%Plug.Conn{params: %{"id" => id},
-              assigns: %{current_user: %{id: current_id} = current_user}} = conn, _opts) do
+  def id_check(%Plug.Conn{params: %{"id" => id}, assigns: %{current_user:
+     %{id: current_id} = current_user}} = conn, _opts) do
     id == to_string(current_id) and conn || unauthorized conn, current_user
   end
 
@@ -122,9 +149,10 @@ defmodule Welcome.Authorize do
      {storage, uniq, id, _}}} = conn, _) do
     render conn, "twofa.html", storage: storage, uniq: uniq, id: id
   end
-  def handle_login(%Plug.Conn{private:
-                            %{openmaize_user: %{role: role}}} = conn, _params) do
-    conn |> put_flash(:info, "You have been logged in") |> redirect(to: @redirects[role])
+  def handle_login(%Plug.Conn{private: %{openmaize_user: %{role: role}}} = conn, _params) do
+    conn
+    |> put_flash(:info, "You have been logged in")
+    |> redirect(to: @redirects[role])
   end
 
   @doc """
