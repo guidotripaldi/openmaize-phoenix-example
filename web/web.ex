@@ -35,6 +35,7 @@ defmodule Welcome.Web do
       import Ecto.Query, only: [from: 1, from: 2]
 
       import Welcome.Router.Helpers
+      import Welcome.Gettext
     end
   end
 
@@ -49,6 +50,8 @@ defmodule Welcome.Web do
       use Phoenix.HTML
 
       import Welcome.Router.Helpers
+      import Welcome.ErrorHelpers
+      import Welcome.Gettext
     end
   end
 
@@ -66,7 +69,7 @@ defmodule Welcome.Web do
       alias Welcome.Repo
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
-
+      import Welcome.Gettext
     end
   end
 

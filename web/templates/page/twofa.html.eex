@@ -4,17 +4,13 @@
   <%= if f.errors != [] do %>
     <div class="alert alert-error">
       <p>Please check the errors below:</p>
-      <ul>
-        <%= for {attr, message} <- f.errors do %>
-          <li><%= humanize(attr) %> <%= message %></li>
-        <% end %>
-      </ul>
     </div>
   <% end %>
 
   <div class="form-group">
     <label>Verification code</label>
     <%= text_input f, :totp, class: "form-control" %>
+    <%= error_tag f, :totp %>
   </div>
 
   <%= hidden_input f, :storage, value: @storage %>

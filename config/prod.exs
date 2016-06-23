@@ -19,6 +19,9 @@ config :welcome, Welcome.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :openmaize,
+  db_module: Welcome.OpenmaizeEcto
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

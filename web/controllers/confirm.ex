@@ -1,7 +1,8 @@
 defmodule Welcome.Confirm do
+
+  import Plug.Conn
   import Phoenix.Controller
   import Welcome.Authorize
-  import Welcome.Router.Helpers
 
   @doc """
   Check the user's confirmation key.
@@ -20,7 +21,7 @@ defmodule Welcome.Confirm do
     unauthenticated conn, message
   end
   def handle_confirm(%Plug.Conn{private: %{openmaize_info: message}} = conn, _params) do
-    conn |> put_flash(:info, message) |> redirect(to: login_path(conn, :login))
+    conn |> put_flash(:info, message) |> redirect(to: "/login")
   end
 
   @doc """
@@ -41,12 +42,12 @@ defmodule Welcome.Confirm do
   See the documentation for Openmaize.ResetPassword for more information.
   """
   def handle_reset(%Plug.Conn{private: %{openmaize_error: message}} = conn,
-                  %{"user" => %{"email" => email, "key" => key}}) do
+   %{"user" => %{"email" => email, "key" => key}}) do
     conn
     |> put_flash(:error, message)
     |> render("reset_form.html", email: email, key: key)
   end
   def handle_reset(%Plug.Conn{private: %{openmaize_info: message}} = conn, _params) do
-    conn |> put_flash(:info, message) |> redirect(to: login_path(conn, :login))
+    conn |> put_flash(:info, message) |> redirect(to: "/login")
   end
 end

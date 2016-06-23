@@ -14,6 +14,8 @@ config :welcome, Welcome.Endpoint,
   pubsub: [name: Welcome.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :welcome, ecto_repos: [Welcome.Repo]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

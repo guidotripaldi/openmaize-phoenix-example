@@ -3,14 +3,14 @@ defmodule Welcome.Mixfile do
 
   def project do
     [app: :welcome,
-     version: "0.19.0",
+     version: "0.20.0",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
-     deps: deps]
+     aliases: aliases(),
+     deps: deps()]
   end
 
   def application do
@@ -23,21 +23,22 @@ defmodule Welcome.Mixfile do
   defp elixirc_paths(_),     do: ["lib", "web"]
 
   defp deps do
-    [{:phoenix, "~> 1.1"},
-     {:phoenix_ecto, "~> 2.0"},
+    [{:phoenix, git: "https://github.com/phoenixframework/phoenix.git", override: true},
+     {:phoenix_ecto, "~> 3.0"},
      {:postgrex, "~> 0.11"},
-     {:phoenix_html, "~> 2.5"},
+     {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.10"},
+     {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:mailgun, "~> 0.1"},
-     {:not_qwerty123, "~> 1.1"},
-     {:openmaize_jwt, "~> 0.10"},
-     {:openmaize, "~> 0.19"}]
+     {:not_qwerty123, "~> 1.2"},
+     {:openmaize_jwt, "~> 0.11"},
+     {:openmaize, "~> 1.0.0-beta.0"}]
   end
 
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-     "ecto.reset": ["ecto.drop", "ecto.setup"]]
+     "ecto.reset": ["ecto.drop", "ecto.setup"],
+     "test": ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end

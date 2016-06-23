@@ -2,7 +2,7 @@ defmodule Welcome.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
-  
+
   use Phoenix.HTML
 
   @doc """
@@ -13,7 +13,7 @@ defmodule Welcome.ErrorHelpers do
       content_tag :span, translate_error(error), class: "help-block"
     end
   end
-  
+
   @doc """
   Translates an error message using gettext.
   """
@@ -26,10 +26,10 @@ defmodule Welcome.ErrorHelpers do
     #
     #     dngettext "errors", "1 file", "%{count} files", count
     #
-    Gettext.dngettext(Welcome.Gettext, "errors", msg, msg, opts[:count], opts)
-  end
-
-  def translate_error(msg) do
-    Gettext.dgettext(Welcome.Gettext, "errors", msg)
+    if count = opts[:count] do
+      Gettext.dngettext(Welcome.Gettext, "errors", msg, msg, count, opts)
+    else
+      Gettext.dgettext(Welcome.Gettext, "errors", msg, opts)
+    end
   end
 end

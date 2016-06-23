@@ -1,7 +1,7 @@
 defmodule Welcome.Authorize do
+
   import Plug.Conn
   import Phoenix.Controller
-  import Welcome.Router.Helpers
   alias Welcome.{Repo, User}
 
   @redirects %{"admin" => "/admin", "user" => "/users", nil => "/"}
@@ -23,7 +23,7 @@ defmodule Welcome.Authorize do
       def action(conn, _), do: authorize_action conn, ["admin", "user"], __MODULE__
 
   This command will only allow connections for users with the "admin" or "user"
-  roles.
+  role.
 
   You will also need to change the other functions in the controller to accept
   a third argument, which is the current user. For example, change:
@@ -67,7 +67,7 @@ defmodule Welcome.Authorize do
   def unauthenticated(conn, message \\ "You need to log in to view this page") do
     conn
     |> put_flash(:error, message)
-    |> redirect(to: login_path(conn, :login))
+    |> redirect(to: "/login")
     |> halt
   end
 

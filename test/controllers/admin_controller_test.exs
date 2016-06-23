@@ -13,7 +13,7 @@ defmodule Welcome.AdminControllerTest do
   @user_token user_token
 
   setup do
-    conn = conn()
+    conn = build_conn()
     |> put_req_cookie("access_token", @user_token)
     {:ok, conn: conn}
   end
@@ -24,7 +24,7 @@ defmodule Welcome.AdminControllerTest do
   end
 
   test "GET /admin redirect for unauthorized user" do
-    conn = conn() |> get(admin_path(conn, :index))
+    conn = build_conn() |> get(admin_path(build_conn(), :index))
     assert redirected_to(conn) == login_path(conn, :login)
   end
 
@@ -34,7 +34,7 @@ defmodule Welcome.AdminControllerTest do
     assert Repo.get_by(User, %{email: "bill@mail.com"})
   end
 
-  test "does not create user when data is invalid", %{conn: conn} do
+  test "does not create user when data is invalid", %{conn: conn} do # not working atm
     conn = post conn, admin_path(conn, :create), user: @invalid_attrs
     assert html_response(conn, 200)
     refute Repo.get_by(User, %{email: "albert@mail.com"})
@@ -42,8 +42,7 @@ defmodule Welcome.AdminControllerTest do
 
   test "delete user", %{conn: conn} do
     user = Repo.get(User, 3)
-    conn = conn
-    |> delete(admin_path(conn, :delete, user))
+    conn = conn |> delete(admin_path(conn, :delete, user))
     assert redirected_to(conn) == admin_path(conn, :index)
     refute Repo.get(User, user.id)
   end

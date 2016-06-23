@@ -1,7 +1,7 @@
 defmodule Welcome.AuthorizeTest do
   use Welcome.ConnCase
 
-  import Openmaize.DB
+  import Welcome.OpenmaizeEcto
   import OpenmaizeJWT.Create
   alias Welcome.{Repo, User}
 
@@ -9,11 +9,11 @@ defmodule Welcome.AuthorizeTest do
   @invalid_attrs %{email: "tony@mail.com", password: "maaaangoes&g00zeberries"}
 
   {:ok, user_token} = %{id: 3, email: "tony@mail.com", role: "user"}
-                      |> generate_token({0, 86400})
+                      |> generate_token({0, 1440})
   @user_token user_token
 
   setup do
-    conn = conn()
+    conn = build_conn()
     |> put_req_cookie("access_token", @user_token)
     {:ok, conn: conn}
   end
@@ -31,7 +31,7 @@ defmodule Welcome.AuthorizeTest do
   end
 
   test "authorization for nil user fails" do
-    conn = conn() |> get("/users")
+    conn = build_conn() |> get("/users")
     assert redirected_to(conn) == "/login"
   end
 
@@ -47,28 +47,28 @@ defmodule Welcome.AuthorizeTest do
   end
 
   test "id check fails for nil user" do
-    conn = conn() |> get("/users/3")
+    conn = build_conn() |> get("/users/3")
     assert redirected_to(conn) == "/login"
   end
 
   test "login succeeds" do
     # Remove the Repo.get_by line if you are not using email confirmation
     Repo.get_by(User, %{email: "tony@mail.com"}) |> user_confirmed
-    conn = post conn, "/login", user: @valid_attrs
+    conn = post build_conn(), "/login", user: @valid_attrs
     assert redirected_to(conn) == "/users"
   end
 
   test "login fails" do
     # Remove the Repo.get_by line if you are not using email confirmation
     Repo.get_by(User, %{email: "reg@mail.com"}) |> user_confirmed
-    conn = post conn, "/login", user: @invalid_attrs
+    conn = post build_conn(), "/login", user: @invalid_attrs
     assert redirected_to(conn) == "/login"
   end
 
   test "logout succeeds" do
   {:ok, user_token} = %{id: 3, email: "tony@mail.com", role: "user"}
-                      |> generate_token({0, 86400})
-    conn = conn()
+                      |> generate_token({0, 1440})
+    conn = build_conn()
     |> put_req_cookie("access_token", user_token)
     |> delete("/logout")
     assert redirected_to(conn) == "/"

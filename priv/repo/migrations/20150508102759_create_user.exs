@@ -16,7 +16,7 @@ defmodule Welcome.Repo.Migrations.CreateUser do
       add :otp_required, :boolean
       add :otp_secret, :string
 
-      timestamps
+      timestamps()
     end
 
     create unique_index :users, [:email]

@@ -46,8 +46,7 @@ config :welcome, Welcome.Repo,
 # For more information about configuration, see the documentation
 # for the Openmaize.Config module.
 config :openmaize,
-  user_model: Welcome.User,
-  repo: Welcome.Repo
+  db_module: Welcome.OpenmaizeEcto
 
 # OpenmaizeJWT configuration
 config :openmaize_jwt,

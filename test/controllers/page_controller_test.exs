@@ -2,7 +2,7 @@ defmodule Welcome.PageControllerTest do
   use Welcome.ConnCase
 
   test "GET /" do
-    conn = get conn(), "/"
+    conn = get build_conn(), "/"
     assert html_response(conn, 200) =~ "You have beautiful thighs!"
   end
 end

@@ -1,7 +1,7 @@
 defmodule Welcome.User do
   use Welcome.Web, :model
 
-  alias Openmaize.DB
+  alias Welcome.OpenmaizeEcto
 
   # IMPORTANT
   # only add `confirmed_at` to your schema if you are using email confirmation
@@ -20,7 +20,7 @@ defmodule Welcome.User do
     field :otp_required, :boolean
     field :otp_secret, :string
 
-    timestamps
+    timestamps()
   end
 
   @doc """
@@ -29,7 +29,7 @@ defmodule Welcome.User do
   If `params` are nil, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, ~w(email role), ~w(username bio))
     |> validate_length(:username, min: 1, max: 100)
@@ -39,13 +39,13 @@ defmodule Welcome.User do
   def auth_changeset(model, params, key) do
     model
     |> changeset(params)
-    |> DB.add_password_hash(params)
-    |> DB.add_confirm_token(key)
+    |> OpenmaizeEcto.add_password_hash(params)
+    |> OpenmaizeEcto.add_confirm_token(key)
   end
 
   def reset_changeset(model, params, key) do
     model
     |> cast(params, ~w(email), [])
-    |> DB.add_reset_token(key)
+    |> OpenmaizeEcto.add_reset_token(key)
   end
 end

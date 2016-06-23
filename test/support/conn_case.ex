@@ -34,8 +34,10 @@ defmodule Welcome.ConnCase do
   end
 
   setup tags do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Welcome.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(Welcome.Repo, [])
+      Ecto.Adapters.SQL.Sandbox.mode(Welcome.Repo, {:shared, self()})
     end
 
     :ok

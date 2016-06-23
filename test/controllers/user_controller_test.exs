@@ -13,7 +13,7 @@ defmodule Welcome.UserControllerTest do
   @user_token user_token
 
   setup do
-    conn = conn()
+    conn = build_conn()
     |> put_req_cookie("access_token", @user_token)
     {:ok, conn: conn}
   end
@@ -24,7 +24,7 @@ defmodule Welcome.UserControllerTest do
   end
 
   test "GET /users redirect for unauthorized user" do
-    conn = conn() |> get(user_path(conn, :index))
+    conn = build_conn() |> get(user_path(build_conn(), :index))
     assert redirected_to(conn) == login_path(conn, :login)
   end
 
