@@ -15,7 +15,7 @@ defmodule Welcome.Mixfile do
 
   def application do
     [mod: {Welcome, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
                     :phoenix_ecto, :postgrex, :openmaize, :openmaize_jwt]]
   end
 
@@ -23,7 +23,8 @@ defmodule Welcome.Mixfile do
   defp elixirc_paths(_),     do: ["lib", "web"]
 
   defp deps do
-    [{:phoenix, git: "https://github.com/phoenixframework/phoenix.git", override: true},
+    [{:phoenix, "~> 1.2"},
+     {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, "~> 0.11"},
      {:phoenix_html, "~> 2.6"},
@@ -33,7 +34,7 @@ defmodule Welcome.Mixfile do
      {:mailgun, "~> 0.1"},
      {:not_qwerty123, "~> 1.2"},
      {:openmaize_jwt, "~> 0.11"},
-     {:openmaize, "~> 1.0.0-beta.0"}]
+     {:openmaize, "~> 1.0.0-beta"}]
   end
 
   defp aliases do
