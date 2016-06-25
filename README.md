@@ -18,7 +18,7 @@ If you want to use this repository as an example of how to use Openmaize,
 the most important files to look at are:
 
 * config/dev.exs
-  * configuring Openmaize
+  * configuring Openmaize and OpenmaizeJWT
 * web/router.ex
   * authentication using Openmaize.Authenticate
     * authenticates the user using JSON Web Tokens

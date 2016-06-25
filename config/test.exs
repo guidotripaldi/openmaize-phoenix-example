@@ -21,8 +21,6 @@ config :welcome, Welcome.Repo,
 # Openmaize authentication library configuration
 # For more information about configuration, see the documentation
 # for the Openmaize.Config module.
-config :openmaize,
-  db_module: Welcome.OpenmaizeEcto
 
 # OpenmaizeJWT configuration
 config :openmaize_jwt,

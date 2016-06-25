@@ -12,7 +12,8 @@ config :welcome, Welcome.Endpoint,
   code_reloader: true,
   cache_static_lookup: false,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin"]]
+  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
+             cd: Path.expand("../", __DIR__)]]
 
 # Watch static and templates for browser reloading.
 config :welcome, Welcome.Endpoint,
@@ -45,8 +46,6 @@ config :welcome, Welcome.Repo,
 # Openmaize authentication library configuration
 # For more information about configuration, see the documentation
 # for the Openmaize.Config module.
-config :openmaize,
-  db_module: Welcome.OpenmaizeEcto
 
 # OpenmaizeJWT configuration
 config :openmaize_jwt,
