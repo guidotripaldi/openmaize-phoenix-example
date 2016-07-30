@@ -1,5 +1,5 @@
-# In this example, there are several values for each user.
-# The required values are `username`, `password_hash` and `role`.
+# In this example, there are several values for each user
+# The required values are `username` and `password_hash`
 
 users = [
   %{
@@ -16,6 +16,7 @@ users = [
     email: "dick@mail.com",
     username: "dick",
     password_hash: Comeonin.Bcrypt.hashpwsalt("mangoes"),
+    remember: true,
     role: "user",
     confirmed_at: Ecto.DateTime.utc,
     bio: "I was born in..."
@@ -24,6 +25,7 @@ users = [
     email: "harry@mail.com",
     username: "harry",
     password_hash: Comeonin.Bcrypt.hashpwsalt("mangoes"),
+    remember: true,
     role: "user",
     confirmed_at: Ecto.DateTime.utc,
     bio: "I was born in..."

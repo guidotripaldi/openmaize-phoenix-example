@@ -46,10 +46,8 @@ config :welcome, Welcome.Repo,
 # Openmaize authentication library configuration
 # For more information about configuration, see the documentation
 # for the Openmaize.Config module.
-
-# OpenmaizeJWT configuration
-config :openmaize_jwt,
-  token_data: %{}
+config :openmaize,
+  remember_salt: "12345678"
 
 # Configure mailgun
 config :welcome,

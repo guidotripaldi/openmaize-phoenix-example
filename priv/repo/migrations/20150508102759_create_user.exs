@@ -6,6 +6,7 @@ defmodule Welcome.Repo.Migrations.CreateUser do
       add :email, :string
       add :username, :string
       add :password_hash, :string
+      add :remember, :boolean
       add :role, :string
       add :confirmed_at, :datetime
       add :confirmation_token, :string
@@ -21,5 +22,6 @@ defmodule Welcome.Repo.Migrations.CreateUser do
 
     create unique_index :users, [:email]
     create unique_index :users, [:username]
+    #create unique_index :users, [:email, :username]
   end
 end

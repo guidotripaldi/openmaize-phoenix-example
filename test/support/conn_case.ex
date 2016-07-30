@@ -20,12 +20,11 @@ defmodule Welcome.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      # Alias the data repository and import query/model functions
       alias Welcome.Repo
-      import Ecto.Model
-      import Ecto.Query, only: [from: 2]
+      import Ecto
+      import Ecto.Changeset
+      import Ecto.Query
 
-      # Import URL helpers from the router
       import Welcome.Router.Helpers
 
       # The default endpoint for testing
@@ -40,6 +39,6 @@ defmodule Welcome.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Welcome.Repo, {:shared, self()})
     end
 
-    :ok
+    {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

@@ -1,5 +1,6 @@
 defmodule Welcome.Confirm do
 
+  import Plug.Conn
   import Phoenix.Controller
   import Welcome.Authorize
 
@@ -49,6 +50,10 @@ defmodule Welcome.Confirm do
     |> render("reset_form.html", email: email, key: key)
   end
   def handle_reset(%Plug.Conn{private: %{openmaize_info: message}} = conn, _params) do
-    conn |> put_flash(:info, message) |> redirect(to: "/login")
+    conn
+    |> configure_session(drop: true)
+    |> Openmaize.Remember.delete_rem_cookie
+    |> put_flash(:info, message)
+    |> redirect(to: "/login")
   end
 end

@@ -2,37 +2,66 @@ defmodule Welcome.Authorize do
 
   import Plug.Conn
   import Phoenix.Controller
-  alias Welcome.{Repo, User}
 
   @redirects %{"admin" => "/admin", "user" => "/users", nil => "/"}
 
   @doc """
-  Check the current user role and authorize the user without a database
-  lookup.
+  Custom action that can be used to override the `action` function in any
+  Phoenix controller.
+
+  This function checks for a `current_user` value. If there is no current_user,
+  the `unauthenticated` function is called.
+
+  ## Examples
+
+  First, import this module in the controller, and then add the following line:
+
+      def action(conn, _), do: authorize_action conn, __MODULE__
+
+  This command will only allow connections for users with the "admin" or "user"
+  role.
+
+  You will also need to change the other functions in the controller to accept
+  a third argument, which is the current user. For example, change:
+  `def index(conn, params) do` to: `def index(conn, params, user) do`
   """
-  def authorize_role(%Plug.Conn{assigns: %{current_user: nil}} = conn, _, _) do
+  def authorize_action(%Plug.Conn{assigns: %{current_user: nil}} = conn, _, _) do
     unauthenticated conn
   end
-  def authorize_role(%Plug.Conn{assigns: %{current_user: current_user},
-    params: params} = conn, roles, module) do
-    if current_user.role in roles do
-      apply(module, action_name(conn), [conn, params, current_user])
-    else
-      unauthorized conn, current_user
-    end
+  def authorize_action(%Plug.Conn{assigns: %{current_user: current_user},
+    params: params} = conn, module) do
+    apply(module, action_name(conn), [conn, params, current_user])
   end
 
   @doc """
-  Check the current user role and authorize the user. Get the user
-  information from the database.
+  Similar to `authorize_action`, but the user's role is also checked to
+  make sure it is in the list of authorized roles.
+
+  This function checks for a `current_user` value, and if it finds it, it
+  then checks that the user's role is in the list of allowed roles. If
+  there is no current_user, the `unauthenticated` function is called, and
+  if the user's role is not in the list of allowed roles, the `unauthorized`
+  function is called.
+
+  ## Examples
+
+  First, import this module in the controller, and then add the following line:
+
+      def action(conn, _), do: authorize_action_role conn, ["admin", "user"], __MODULE__
+
+  This command will only allow connections for users with the "admin" or "user"
+  role.
+
+  You will also need to change the other functions in the controller to accept
+  a third argument, which is the current user. For example, change:
+  `def index(conn, params) do` to: `def index(conn, params, user) do`
   """
-  def authorize_role_dbcheck(%Plug.Conn{assigns: %{current_user: nil}} = conn, _, _) do
+  def authorize_action_role(%Plug.Conn{assigns: %{current_user: nil}} = conn, _, _) do
     unauthenticated conn
   end
-  def authorize_role_dbcheck(%Plug.Conn{assigns: %{current_user: current_user},
+  def authorize_action_role(%Plug.Conn{assigns: %{current_user: current_user},
     params: params} = conn, roles, module) do
     if current_user.role in roles do
-      current_user = Repo.get(User, current_user.id)
       apply(module, action_name(conn), [conn, params, current_user])
     else
       unauthorized conn, current_user
@@ -129,12 +158,19 @@ defmodule Welcome.Authorize do
   def handle_login(%Plug.Conn{private: %{openmaize_error: message}} = conn, _params) do
     unauthenticated conn, message
   end
-  def handle_login(%Plug.Conn{private: %{openmaize_otpdata:
-     {storage, uniq, id, _}}} = conn, _) do
-    render conn, "twofa.html", storage: storage, uniq: uniq, id: id
+  def handle_login(%Plug.Conn{private: %{openmaize_otpdata: id}} = conn, _) do
+    render conn, "twofa.html", id: id
   end
-  def handle_login(%Plug.Conn{private: %{openmaize_user: %{role: role}}} = conn, _params) do
+  def handle_login(%Plug.Conn{private: %{openmaize_user: %{id: id, role: role, remember: true}}} = conn,
+   %{"user" => %{"remember_me" => "true"}}) do
     conn
+    |> Openmaize.Remember.add_cookie(id)
+    |> put_flash(:info, "You have been logged in")
+    |> redirect(to: @redirects[role])
+  end
+  def handle_login(%Plug.Conn{private: %{openmaize_user: %{id: id, role: role}}} = conn, _params) do
+    conn
+    |> put_session(:user_id, id)
     |> put_flash(:info, "You have been logged in")
     |> redirect(to: @redirects[role])
   end
@@ -142,16 +178,13 @@ defmodule Welcome.Authorize do
   @doc """
   Logout and redirect to the home page.
 
-  ## Examples
-
-  Add the following line to the controller which handles logout:
-
-      plug Openmaize.Logout when action in [:logout]
-
-  and then call `handle_logout` from the `logout` function in the
-  controller.
+  This example also deletes the remember_me cookie if it is present.
   """
-  def handle_logout(%Plug.Conn{private: %{openmaize_info: message}} = conn, _params) do
-    conn |> put_flash(:info, message) |> redirect(to: "/")
+  def handle_logout(conn, _params) do
+    conn
+    |> configure_session(drop: true)
+    |> Openmaize.Remember.delete_rem_cookie
+    |> put_flash(:info, "You have been logged out")
+    |> redirect(to: "/")
   end
 end

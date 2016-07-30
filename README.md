@@ -14,8 +14,7 @@ with Openmaize.
 
   ```elixir
   defp deps do
-    [{:openmaize, "~> 1.0.0-beta"},
-    {:openmaize_jwt, "~> 0.12"]
+    [{:openmaize, "~> 1.0.0-beta"}]
   end
   ```
 
@@ -23,7 +22,7 @@ with Openmaize.
 
   ```elixir
   def application do
-    [applications: [:logger, :openmaize, :openmaize_jwt]]
+    [applications: [:logger, :openmaize]]
   end
   ```
 

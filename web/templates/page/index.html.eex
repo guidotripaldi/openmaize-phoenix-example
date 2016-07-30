@@ -19,4 +19,4 @@ enough to forget their passwords...</p>
   <li>secure!</li>
 </ul>
 <p>Openmaize depends on Plug for much of its functionality, and it uses Comeonin
-and JSON Web tokens for authentication.</p>
+and Plug sessions for authentication.</p>

@@ -3,8 +3,8 @@ defmodule ConnCase.Helper do
   alias Welcome.{Repo, User}
 
   @users [
-    %{id: 1, email: "gladys@mail.com", role: "user", password: "mangoes&g0oseberries"},
-    %{id: 2, email: "reg@mail.com", role: "admin", password: "mangoes&g0oseberries"},
+    %{id: 1, email: "gladys@mail.com", role: "admin", password: "mangoes&g0oseberries"},
+    %{id: 2, email: "reg@mail.com", role: "user", password: "mangoes&g0oseberries"},
     %{id: 3, email: "tony@mail.com", role: "user", password: "mangoes&g0oseberries"}
   ]
 

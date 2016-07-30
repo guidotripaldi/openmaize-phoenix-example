@@ -8,9 +8,10 @@ defmodule Welcome.User do
   schema "users" do
     field :email, :string
     field :username, :string
-    field :role, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :remember, :boolean
+    field :role, :string
     field :confirmed_at, Ecto.DateTime
     field :confirmation_token, :string
     field :confirmation_sent_at, Ecto.DateTime

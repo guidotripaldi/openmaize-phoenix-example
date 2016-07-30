@@ -7,7 +7,7 @@ defmodule Welcome.UserController do
   plug :scrub_params, "user" when action in [:update]
   plug :id_check when action in [:show, :edit, :update]
 
-  def action(conn, _), do: authorize_role_dbcheck conn, ["admin", "user"], __MODULE__
+  def action(conn, _), do: authorize_action_role conn, ["admin", "user"], __MODULE__
 
   def index(conn, _params, _user) do
     render conn, "index.html"

@@ -14,7 +14,6 @@ defmodule Welcome.PageController do
   plug Openmaize.Login, [db_module: Welcome.OpenmaizeEcto,
    unique_id: &Name.email_username/1, override_exp: 10_080] when action in [:login_user]
   plug Openmaize.OnetimePass, [db_module: Welcome.OpenmaizeEcto] when action in [:login_twofa]
-  plug Openmaize.Logout when action in [:logout]
 
   def index(conn, _params) do
     render conn, "index.html"

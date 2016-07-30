@@ -22,10 +22,6 @@ config :welcome, Welcome.Repo,
 # For more information about configuration, see the documentation
 # for the Openmaize.Config module.
 
-# OpenmaizeJWT configuration
-config :openmaize_jwt,
-  token_data: %{}
-
 # Configure mailgun
 config :welcome,
   mailgun_domain: System.get_env("MAILGUN_DOMAIN"),
