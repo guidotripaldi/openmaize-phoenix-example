@@ -2,7 +2,7 @@
 
 <%= form_for @conn, page_path(@conn, :askreset), [as: :user], fn f -> %>
   <%= if f.errors != [] do %>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
       <p>Please check the errors below:</p>
     </div>
   <% end %>
@@ -10,12 +10,12 @@
   <h4>Please enter your email address</h4>
 
   <div class="form-group">
-    <label>Email</label>
+    <label class="control-label">Email</label>
     <%= text_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
 
   <div class="form-group">
-    <%= submit "Submit", class: "btn" %>
+    <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>

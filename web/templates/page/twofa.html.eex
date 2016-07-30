@@ -2,23 +2,21 @@
 
 <%= form_for @conn, page_path(@conn, :login_twofa), [as: :user], fn f -> %>
   <%= if f.errors != [] do %>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
       <p>Please check the errors below:</p>
     </div>
   <% end %>
 
   <div class="form-group">
-    <label>Verification code</label>
+    <label class="control-label">Verification code</label>
     <%= text_input f, :totp, class: "form-control" %>
     <%= error_tag f, :totp %>
   </div>
 
-  <%= hidden_input f, :storage, value: @storage %>
-  <%= hidden_input f, :uniq, value: @uniq %>
   <%= hidden_input f, :id, value: @id %>
 
   <div class="form-group">
-    <%= submit "Submit", class: "btn" %>
+    <%= submit "Submit", class: "btn btn-primary" %>
   </div>
 <% end %>
 
