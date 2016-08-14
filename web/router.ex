@@ -7,8 +7,8 @@ defmodule Welcome.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug Openmaize.Authenticate, db_module: Welcome.OpenmaizeEcto
-    plug Openmaize.Remember, db_module: Welcome.OpenmaizeEcto
+    plug Openmaize.Authenticate
+    plug Openmaize.Remember
   end
 
   scope "/", Welcome do
