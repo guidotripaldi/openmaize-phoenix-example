@@ -54,8 +54,8 @@ These are the step-by-step instructions to how to run this example for the first
 
 (***) Before to try the admin login, open a new terminal session, then launch the Interactive Elixir 
       typing `iex -S mix` on the command line,
-      then type `Welcome.Repo.get(Welcome.User, <id>).otp_secret |> Comeonin.Otp.gen_totp` but **without** executing the command by pressing the return key.
-      *(substitute `<id>` with the actual record id of the admin user, that is 1 for the `Tom` user in the default seed file)*
+      then type `Welcome.Repo.get_by(Welcome.User, username: "<username>").otp_secret |> Comeonin.Otp.gen_totp` but **without** executing the command by pressing the return key.
+      *(substitute `<username>` with the actual username for the admin user, i.e. "tom" for the `Tom` user in the default seed file)*
       then:
         - navigate to `http://localhost:4000/login`, 
         - enter username and password for the preferred admin user (i.e. `tom`, `mangoes`) and press the submit button
