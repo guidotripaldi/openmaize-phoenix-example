@@ -59,7 +59,7 @@ Notes:
      ```# Configures MailGun
        config :welcome, mailgun_domain: "https://api.mailgun.net/v3/sandbox<your_mailgun_domain_code>.mailgun.org",`
        mailgun_key: "key-<your_mailgun_key_code>"
-       ```
+       ```   
        
 3. Before to try the admin login, open a new terminal session, then launch the Interactive Elixir 
     by typing `iex -S mix` on the command line,
