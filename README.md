@@ -75,10 +75,10 @@ Notes:
       - Go to the `iex` session and press the `Return` key at the end 
         of the previously typed command line to generate the tOTP token
       - You will get a six digits number
-      - Submit the token into the "Verification code" login form before the token expires.
-
-Happy testing!
-
+      - Submit the token into the "Verification code" login form before the token expires.  
+  
+Happy testing!  
+  
 
 
 
